@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/txin.iml" filepath="$PROJECT_DIR$/txin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/txin-service/txin-service.iml" filepath="$PROJECT_DIR$/txin-service/txin-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/txin-web/txin-web.iml" filepath="$PROJECT_DIR$/txin-web/txin-web.iml" />
+    </modules>
+  </component>
+</project>
