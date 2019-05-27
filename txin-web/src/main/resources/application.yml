@@ -1,1 +1,320 @@
+spring:
+  application:
+    name: base
+  mvc:
+    throwExceptionIfNoHandlerFound: true
+  resources:
+    staticLocations: classpath:/webapp/
+  task:
+    taskSchedulerPoolSize: 16
+  security:
+    debug: true
+  http:
+    multipart:
+      maxFileSize: 100Mb
+      maxRequestSize: 1000Mb
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: teleinfo
+    password: teleinfo
+    virtual-host: /
+    publisher-confirms: true  #  消息发送到交换机确认机制,是否确认回调
+    publisher-returns: true
+    queueName: log_queue
+    exchange: log_queue
+    isOpen: false
+  datasource:
+    # 使用MYSQL的配置
+    name: MYSQL
+    identity: MYSQL
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/txin?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    validationQuery: select 1
 
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    needSql: true
+    removeAbandoned: false
+    needWeb: false
+
+  #关于redis.password的可适配性：
+  #1. 如果服务器redis无密码，则该项必须留空
+  #2. 如果服务器redis有密码，则该项必须填写密码(请确保密码的正确性)
+  redis:
+    database: 0
+    host: 172.31.134.225
+    port: 6379
+    password:
+    timeout: 6000
+    pool:
+      maxActive: 1024
+      maxIdle: 200
+      minIdle: 10
+      maxWait: 1000
+  kafka:
+    consumer:
+#      servers: 39.105.82.158:9092
+      servers:
+      enable.auto.commit: true
+      session.timeout: 6000
+      auto.commit.interval: 100
+      auto.offset.reset: latest
+      group.id: consume
+      concurrency: 10
+    producer:
+#      servers: 39.105.82.158:9092
+      servers:
+      retries: 1
+      batch.size: 4096
+      linger: 1
+      buffer.memory: 40960
+
+#省
+province: 420000
+#ip基准表的接口地址
+ipBase:
+  ipBaseUrl: http://172.31.131.133:9999/ipBase/selectByParam
+
+#一键管控的接口
+oneKeyControl:
+  #dns系统一键管控的url地址
+  dnsControlUrl: http://127.0.0.1:8081/ismi-gj/oneKeyControlFilter.do
+  #dns系统一键管控的url地址
+  dnsControlQueryUrl: http://127.0.0.1:8081/ismi-gj/queryOneKeyControlFilter.do
+  #一键管控调用信安的接口查询
+  smcsUrl: http://172.31.131.127:8891/blockDomainIp/getBlockDomainIp.do
+  #一键管控调用信安的接口封堵
+  idcStartStrategyUrl: http://172.31.134.243:8080/smcs_gj/dialinginterfaces/thirdCommandSend/acceptFilterCommand.do
+  #dns系统一键管控的加密秘钥
+  encryptionKey: 1234567890abcDEF
+
+
+
+server:
+  port: 8080
+  # port: 8443
+  # ssl:
+  #   reDirectFromPort: 8080
+  #   key-store: classpath:keystore.p12
+  #   key-store-password: 123456
+  #   keyStoreType: PKCS12
+  #   keyAlias: springboot
+  context-path: /
+  session-timeout: 5000
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript
+  error:
+    whitelabel:
+      enabled: false
+  tomcat:
+    uri-encoding: UTF-8
+
+
+ftpInfo:
+  #web服务器提供的ftp信息
+  ip: 221.232.145.66
+  port: 41021
+  user: gyhl
+  pwd: Rzx!@#
+  #该用户的ftp根路径
+  rootPath: /ftpdata
+  #存放的本地路径
+  localPath: /home/ftp/ads-web
+
+ftpInfo_henan: #ftp://hnlt:hnlt123456@218.28.225.237:21 河南：工业互联网协议上报ftp
+  #web服务器提供的ftp信息
+  ip: 218.28.225.237
+  port: 21
+  user: hnlt
+  pwd: hnlt123456
+  #该用户的ftp根路径
+  rootPath: /
+  #存放的本地路径
+  localPath: /home/ftp/protocol_henan
+
+ftpInfo_app: #app阿里云sftp服务器信息
+  #web服务器提供的ftp信息
+  ip: 39.105.82.158
+  port: 22
+  user: manager
+  pwd: rzxidc2017
+  #该用户的ftp根路径
+  rootPath: /home/manager
+  #存放的本地路径
+  localPath: /home/ftp/app
+
+ftpInfo_gs: #工商数据ftp
+  ip: 219.142.131.78
+  port: 10021
+  user: ftpuser
+  pwd: bc@1218.com.cn
+
+syslog:
+  ip: 39.105.82.158
+  port: 22
+  user: root
+  pwd: yahongpachong-1
+  rootPath: /var/log/industry/
+  localPath: /home/syslog/
+
+assetFtp:
+  #（湖南大数据资产对接）
+  ip: 222.240.44.115
+  port: 22011
+  user: isdms
+  pwd: qazxwafr34
+  rootPath: /home/mx_projects/isdms/asset/
+  localPath: /home/assetFtp/
+
+ipipnet:
+  #（测试时默认不用修改）
+  #内网地址172.31.134.44端口好21 外网地址：58.48.126.38 端口号：4421（固定的两个值，由ipipnet提供）
+  ip: 172.31.134.44
+  port: 21
+  username: smcs
+  password: smcs
+  #该用户的ftp根路径
+  rootpath: ipipnetx/world
+  #存放的本地路径
+  localpath: /home/ipipnet
+  #文件名称
+  filename: IPIP.datx
+
+#es
+es:
+  poolDns:
+#    clusterName: elasticsearch
+    clusterName: es_ads
+#    clusterName: brmscluster
+    ip: 220.178.64.177
+    #ip: 172.31.132.48
+#    ip: 172.31.134.216
+#    ip: 192.168.40.61
+    port: 6300
+    keepClienNum: 5
+  esKey:
+    wormIndex: worm
+    # 僵木蠕索引
+    jmr:
+      # 通用僵木蠕整合索引，查询资产安全事件（匹配后的工控安全事件），与资产ES是同一个ES，无需配ip及端口
+      common:
+        index: jmr_ipunit
+      # 直接用http请求访问，使用9200端口，如果不配，默认走资产ES，目前只有上海资产僵木蠕为同一ES，查询公共互联网安全事件（全量安全事件）
+      sh:
+        ip:
+        port: 9200
+        index: jmr
+    masterControlBotOrTrojanIndex: bot_or_trojan_c
+    slaveControlBotOrTrojanIndex: bot_or_trojan
+    gynetres:
+       index: gynetres
+       type: gynet_type
+    gynetres_dependence:
+       index: gynetres_dependence
+       type: gynet_dependence_type
+    company_gs:
+       index: company_gs
+       type: company_gs_type
+    handleLog:
+       index: handle_log
+       type: handle_log_type
+    syslog:
+      ais:
+        index: ais
+        type: ais_type
+      notice:
+        index: notice
+        type: notice_type
+
+
+#esIndex: gynetres_20180822
+esIndex: gynetres
+# 威努特索引
+esWscanIndex: gynetres_wscan
+
+#工业互联网二级标识解析配置
+idis:
+  handle:
+    ip: 61.183.201.26
+#    ip: 127.0.0.1
+    port: 2641
+    #0:tcp连接,1:基于ssl的tcp连接，2：udp
+    chanelModel: 0
+    userName: root
+    passWord: root
+    keepNum: 5
+    prefix: 88.2000.1
+
+
+task:
+   #单位是秒,用于主动监测的任务的时间计算
+  efficiency: 300000
+  unactiveScanService:
+      cron: 0 0 1 * * ?
+      desc: 同步FTP服务器下DPI流量日志-周期性任务的执行
+      clearRemoteFile: false
+      clearLocalFile: false
+  downipnetQuartz:
+      cron: 0 0 0 1 * ?
+      desc: 同步FTP下IPIPNET数据到本地，周期性任务的执行(按月1号0点执行去执行)
+  autoQuartz:
+    - beanName: autoTaskJob
+      cron: 0 0/30 * * * ?
+      desc: 周期性任务的执行(按月去执行)
+  queryDomainInfo:
+      cron: 0 12 10 ? * *
+      desc: 查询DNS域名系统将域名详细信息入库
+  syncCNVDQuartz:
+      cron: 0 0 6 * * ?
+      desc: 请求cnvd数据(每天早上6点同步前一天数据)
+  syncProtocolQuartz:
+      cron: 0 0 2 * * ?
+      desc: 请求工控协议上报数据
+  syncAppQuartz:
+      cron: 0 0 4 * * SUN
+      desc: 请求工控App数据
+  syncSyslogQuartz:
+      cron: 0 0 5 * * ?
+      desc: 请求syslog数据
+  syncAssetQuartz:
+      cron: 0 0 1 1 * ?
+      desc: 请求asset数据，每月执行一次(湖南)
+  hnDpQuartz:
+      cron: 0 0 1 ? * MON
+      desc: 缓存湖南大屏数据(每个星期一的凌晨一点将湖南大屏数据写入到json中)
+  commonDpQuartz:
+      cron: 0 0 2 * * ?
+      desc: 缓存大屏页面数据(每天凌晨两点执行调度，将数据写入大屏缓存表中，需要开启大屏调度isDpQuartz:true，该配置才生效)
+  isOpen: false
+# 是否启动大屏调度
+isDpQuartz: false
+# 是否启动缓存调度
+isCacheQuartz: true
+
+act:
+  captcha:
+    require: false
+    passString: yhsj66666
+  security:
+    alwaysUseDefaultTargetUrl: false
+    targetUrlMap:
+      普通用户角色: /static/daping/ads/工业互联网资源概况cisms.html
+      管理员角色: /nav.html
+      default-target: /index.html

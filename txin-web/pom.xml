@@ -16,7 +16,10 @@
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<!-- conf -->
+		<project.mainClass>com.act.Application</project.mainClass>
+		<config.outputDirectory>conf</config.outputDirectory>
+		<lib.outputDirectory>lib</lib.outputDirectory>
 	</properties>
 
 	<dependencies>
@@ -36,10 +39,77 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- 生成可执行JAR包命令 maven-jar-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>${lib.outputDirectory}/</classpathPrefix>
+							<mainClass>${project.mainClass}</mainClass>
+						</manifest>
+						<manifestEntries>
+							<!-- 和jar包同级目录的配置文件将被使用 -->
+							<Class-Path>${config.outputDirectory}/</Class-Path>
+						</manifestEntries>
+					</archive>
+					<!-- jar文件中只打包class文件，配置与资源文件由resource插件拷贝到jar包同级路径 -->
+					<includes>
+						<include>**/*.class</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- 使用命令 assembly:single 生成ZIP包 -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<executions>  <!--执行器 mvn assembly:assembly -->
+					<execution>
+						<id>make-zip</id><!--名字任意 -->
+						<phase>package</phase> <!-- 绑定到package生命周期阶段上 -->
+						<goals>
+							<goal>single</goal><!-- 只运行一次 -->
+						</goals>
+						<configuration>
+							<!-- 输出包文件的路径。这里可以写绝对路径，比如某个FTP的目录 -->
+							<outputDirectory>${project.basedir}/zip</outputDirectory>
+							<!-- <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot> -->
+							<descriptors> <!-- 描述文件的路径 -->
+								<descriptor>./assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 </project>
